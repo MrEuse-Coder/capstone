@@ -22,8 +22,8 @@
                             <select
                                 onchange="this.form.submit()"
                                 name="school_year"
-                                class="select bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-lg px-4 py-2 shadow-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-violet-500">
-                                <option value="">ALL BATCHES</option>
+                                class="select bg-[#3a8a0f]  text-white font-semibold rounded-lg px-8 py-2 shadow-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-violet-500">
+                                <option value="">SCHOOL YEAR</option>
                                 @foreach($classSchoolYears as $classSchoolYear)
                                     <option value="{{ $classSchoolYear }}" {{ request('school_year') == $classSchoolYear ? 'selected' : '' }}>
                                         {{ $classSchoolYear }}
@@ -35,29 +35,21 @@
 
                     <!-- Add Batch Button -->
                     <a href="/class_batch/create"
-                       class="flex items-center gap-2 bg-violet-800 hover:bg-violet-900 text-white font-bold px-6 py-2 rounded-lg shadow-lg transition-all transform hover:scale-105 active:scale-95">
-                       Create Batch
+                       class="flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-bold px-6 py-2 rounded-lg shadow-lg transition-all transform hover:scale-105 active:scale-95">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Batch
                     </a>
                 </div>
             </div>
         </div>
 
         <!-- Success Toast -->
-        @if(session('success'))
-            <div
-                x-data="{ show: true }"
-                x-init="setTimeout(() => show = false, 3000)"
-                x-show="show"
-                x-transition
-                class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
-                <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl font-semibold">
-                    {{ session('success') }}
-                </div>
-            </div>
-        @endif
+     <x-notification class="mt-6"></x-notification>
 
         <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-6 py-8">
+        <main class="max-w-5xl mx-auto py-8">
 
             @if($classBatches->isEmpty())
                 <!-- Empty State -->
@@ -67,7 +59,7 @@
                     </svg>
                     <h3 class="text-xl font-semibold text-gray-700 mb-2">No Batches Found</h3>
                     <p class="text-gray-500 mb-6">Create your first batch to get started</p>
-                    <a href="/class_batch/create" class="bg-violet-800 hover:bg-violet-900 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition">
+                    <a href="/class_batch/create" class="bg-[#3a8a0f] hover:bg-green-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition">
                         Create Batch
                     </a>
                 </div>
@@ -76,7 +68,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($classBatches as $classBatch)
                         <div class="relative group">
-                            <!-- Delete Button -->
+                           {{-- <!-- Delete Button -->
 
                             <button
                                 type="submit"
@@ -88,7 +80,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                 </svg>
-                            </button>
+                            </button>--}}
+
 {{--                            <form action="/class_batch/{{ $classBatch->id }}" method="POST" class="absolute -top-2 -right-2 z-10">--}}
 {{--                                @csrf--}}
 {{--                                @method('DELETE')--}}
@@ -105,22 +98,15 @@
 
                             <!-- Card -->
                             <a href="/class_batch/students/{{ $classBatch->id }}"
-                               class="block bg-gradient-to-br from-violet-600 to-violet-800 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 duration-300">
+                               class="block bg-gradient-to-r from-[#005104] to-[#3a8a0f] rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 duration-300">
 
                                 <div class="p-6 text-white">
 
                                     <!-- Batch Number Badge -->
-                                    <div class="flex justify-between items-start mb-4">
-                                        <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-                                            Batch #{{ $classBatch->id }}
-                                        </span>
-                                        <svg class="w-6 h-6 text-white/30" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                                        </svg>
-                                    </div>
+
 
                                     <!-- Batch Name -->
-                                    <h2 class="text-2xl font-bold mb-6 truncate">
+                                    <h2 class="text-xl font-bold mb-6 truncate">
                                         {{ $classBatch->batch_name }}
                                     </h2>
 
@@ -152,12 +138,12 @@
                                                     {{ $classBatch->students_count }}
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div class="text-white/70 text-xs font-medium mb-1">Adviser</div>
-                                                <div class="font-semibold truncate" title="{{ $classBatch->adviser }}">
-                                                    {{ $classBatch->adviser }}
-                                                </div>
-                                            </div>
+{{--                                            <div>--}}
+{{--                                                <div class="text-white/70 text-xs font-medium mb-1">Adviser</div>--}}
+{{--                                                <div class="font-semibold truncate" title="{{ $classBatch->adviser }}">--}}
+{{--                                                    {{ $classBatch->adviser }}--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
                                         </div>
                                     </div>
 
@@ -184,7 +170,7 @@
 
 
         <!-- DELETE MODAL -->
-        <div
+        {{--<div
             x-show="deleteOpen"
             x-transition.opacity
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
@@ -250,7 +236,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div>--}}
     </div>
     </div>
 </x-layout>

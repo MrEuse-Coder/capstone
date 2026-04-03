@@ -6,6 +6,14 @@
               onsubmit="handleSubmit(event)">
             @csrf
 
+            <!-- Back Button -->
+            <a href="{{url()->previous()}}" class="inline-flex items-center gap-2 text-[#3a8a0f] hover:text-green-700 font-semibold mb-6 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back
+            </a>
+
             <!-- Student Info Header -->
             <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                 <div class="flex flex-wrap gap-6 items-center">
@@ -25,11 +33,12 @@
 
             @if($subjectExist)
                 <!-- Table Header -->
-                <div class="bg-gradient-to-r from-violet-600 to-violet-700 rounded-t-lg p-4 mb-1 shadow-md sticky top-0 z-10">
+                <div class="bg-[#3a8a0f] rounded-t-lg p-4 mb-1 shadow-md sticky top-0 z-10">
                     <div class="grid grid-cols-3 text-white font-bold text-center items-center">
                         <div class="flex justify-center gap-4">
                             <div class="w-32">MIDTERM</div>
                             <div class="w-32">FINALS</div>
+                            <div class="w-32">FINAL GRADE</div>
                         </div>
                         <div>COURSE CODE</div>
                         <div>DESCRIPTIVE TITLE</div>
@@ -60,8 +69,8 @@
 
                 @foreach($yearSemesters as $yearData)
                     <!-- Year Header -->
-                    <div class="bg-violet-100 border-l-4 border-violet-600 px-4 py-3 mt-6 mb-3 rounded">
-                        <h2 class="text-xl font-bold text-violet-900">{{ $yearData['year'] }}</h2>
+                    <div class="bg-[#3a8a0f] border-l-4 border-green-600 px-4 py-3 mt-6 mb-3 rounded">
+                        <h2 class="text-xl font-bold text-white">{{ $yearData['year'] }}</h2>
                     </div>
 
                     @foreach($yearData['semesters'] as $semesterData)
@@ -81,13 +90,14 @@
                                             $studentSubject = $subject->students->first();
                                             $midterm = $studentSubject->pivot->midterm ?? '';
                                             $final = $studentSubject->pivot->final ?? '';
+                                            $final_grade = $studentSubject->pivot->final_grade ?? '';
                                         @endphp
 
                                         <!-- Grades Input -->
                                         <div class="flex justify-center gap-4">
                                             <input type="text"
                                                    name="midterm[{{ $subject->id }}]"
-                                                   class="w-32 px-3 py-2 bg-violet-50 border border-violet-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                                                   class="w-32 px-3 py-2 bg-green-50 border border-green-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                                                    placeholder="0.0"
                                                    value="{{ $midterm}}"
                                                    pattern="[0-9]*\.?[0-9]*"
@@ -95,16 +105,24 @@
 
                                             <input type="text"
                                                    name="final[{{ $subject->id }}]"
-                                                   class="w-32 px-3 py-2 bg-violet-50 border border-violet-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                                                   class="w-32 px-3 py-2 bg-green-50 border border-green-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                                                    placeholder="0.0"
                                                    value="{{ $final}}"
                                                    pattern="[0-9]*\.?[0-9]*"
                                                    maxlength="4"/>
+
+{{--                                            final grade input--}}
+                                            <input type="text"
+                                                   name="final_grade[{{ $subject->id }}]"
+                                                   class="w-32 px-3 py-2 bg-green-50 border border-green-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                                                   placeholder="0.0"
+                                                   value="{{ $final_grade}}"
+                                                  />
                                         </div>
 
                                         <!-- Course Code -->
                                         <div class="text-center">
-                                            <span class="inline-block px-3 py-1 bg-violet-100 text-violet-800 font-bold rounded-md uppercase text-sm">
+                                            <span class="inline-block px-3 py-1 bg-[#3a8a0f] text-white font-bold rounded-md uppercase text-sm">
                                                 {{ $subject->course_code }}
                                             </span>
                                         </div>
@@ -127,7 +145,7 @@
                     <button
                         type="submit"
                         id="submitBtn"
-                        class="bg-violet-800 text-white font-bold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 hover:bg-violet-900 hover:shadow-lg">
+                        class="bg-[#3a8a0f] text-white font-bold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 hover:bg-green-900 hover:shadow-lg">
                         Save Grades
                     </button>
                 </div>

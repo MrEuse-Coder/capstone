@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,13 @@ class SubjectController extends Controller
     public function index(Request $request)
     {
         //
-        $subjects = Subject::orderBy('curriculum')
-            ->when($request->search_subject, function ($query, $requestValue) {
-                $query->where('descriptive_title', 'like', "{$requestValue}%");
+        $subjects = Subject::orderBy('year_level','asc')
+            ->orderBy('semester','asc')
+            ->orderBy('curriculum','asc')
+            ->orderBy('descriptive_title','asc')
+            ->when($request->search_subject, function ($query, $search_subject) {
+                $query->where('descriptive_title', 'like', '%' . $search_subject . '%')
+                    ->orWhere('course_code', 'like', '%' . $search_subject . '%');
             })
             ->paginate(10);
 
@@ -41,10 +46,10 @@ class SubjectController extends Controller
         $attrs = $request->validate([
             'course_code' => 'required',
             'descriptive_title' => 'required',
-            'total_units' => 'required',
-            'lec_units' => 'required',
-            'lab_units' => 'required',
-            'hours_week' => 'required',
+            'total_units' => 'required|min:1|max:3',
+            'lec_units' => 'required|min:1|max:3',
+            'lab_units' => 'required|min:1|max:3',
+            'hours_week' => 'required|min:1|max:3',
             'pre_requisite' => 'required',
             'year_level' => 'required',
             'semester' => 'required',
@@ -52,6 +57,12 @@ class SubjectController extends Controller
         ]);
 
         Subject::create($attrs);
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'role' => auth()->user()->role,
+            'action' => 'Added subject',
+            'details' =>$attrs['descriptive_title'],
+        ]);
 
         return redirect('/subject/create')->withInput()->with('success', 'Subject created successfully!');
     }
@@ -82,17 +93,61 @@ class SubjectController extends Controller
         $attrs = $request->validate([
             'course_code' => 'required',
             'descriptive_title' => 'required',
-            'total_units' => 'required',
-            'lec_units' => 'required',
-            'lab_units' => 'required',
-            'hours_week' => 'required',
+            'total_units' => 'required|min:1|max:3',
+            'lec_units' => 'required|min:1|max:3',
+            'lab_units' => 'required|min:1|max:3',
+            'hours_week' => 'required|min:1|max:3',
             'pre_requisite' => 'required',
             'year_level' => 'required',
             'semester' => 'required',
             'curriculum' => 'required',
         ]);
 
+// Capture OLD values
+        $original = $subject->getOriginal();
+
+// Update
         $subject->update($attrs);
+
+// Get changes
+        $changes = $subject->getChanges();
+
+// Labels (VERY IMPORTANT)
+        $labels = [
+            'course_code' => 'Course Code',
+            'descriptive_title' => 'Title',
+            'total_units' => 'Total Units',
+            'lec_units' => 'Lecture Units',
+            'lab_units' => 'Lab Units',
+            'hours_week' => 'Hours/Week',
+            'pre_requisite' => 'Pre-requisite',
+            'year_level' => 'Year Level',
+            'semester' => 'Semester',
+            'curriculum' => 'Curriculum',
+        ];
+
+// Ignore unnecessary fields
+        $ignore = ['updated_at'];
+
+        $logDetails = collect($changes)
+            ->except($ignore)
+            ->map(function ($newValue, $field) use ($original, $labels) {
+                $oldValue = $original[$field] ?? 'N/A';
+                $label = $labels[$field] ?? $field;
+
+                return "$label: $oldValue → $newValue";
+            })
+            ->implode(' | ');
+
+// Save log only if something changed
+        if (!empty($logDetails)) {
+            ActivityLog::create([
+                'user' => auth()->user()->name,
+                'role' => auth()->user()->role,
+                'action' => 'Updated Subject' ,
+                'details' => $logDetails,
+            ]);
+        }
         return redirect('/subjects')->with('success', 'Subject updated successfully!');
     }
 
@@ -103,6 +158,12 @@ class SubjectController extends Controller
     {
         //
         $subject->delete();
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'role' => auth()->user()->role,
+            'action' => 'Deleted Subject' ,
+            'details' => $subject->descriptive_title,
+        ]);
         return redirect('/subjects');
     }
 }

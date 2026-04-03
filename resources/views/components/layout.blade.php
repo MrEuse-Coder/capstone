@@ -66,7 +66,7 @@
 <body class="min-h-screen bg-gray-50 text-gray-900 antialiased">
 
 <!-- Skip to main content (accessibility) -->
-<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-violet-600 text-white px-4 py-2 rounded-lg z-50">
+<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-[#3a8a0f] text-white px-4 py-2 rounded-lg z-50">
     Skip to main content
 </a>
 
@@ -74,7 +74,7 @@
 <x-nav></x-nav>
 
 <!-- Main Content -->
-<main id="main-content" class="page-loading">
+<main id="main-content" class="page-loading mt-24">
     {{ $slot }}
 </main>
 
@@ -95,7 +95,7 @@
 <!-- Back to Top Button -->
 <button
     onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-    class="fixed bottom-6 right-6 bg-violet-600 hover:bg-violet-700 text-white p-3 rounded-full shadow-lg transition transform hover:scale-110 opacity-0 pointer-events-none"
+    class="fixed bottom-6 right-6 bg-[#3a8a0f]  text-white p-3 rounded-full shadow-lg transition transform hover:scale-110 opacity-0 pointer-events-none"
     id="backToTop"
     aria-label="Back to top">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

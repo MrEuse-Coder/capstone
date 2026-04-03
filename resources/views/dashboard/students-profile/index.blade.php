@@ -3,21 +3,7 @@
         <div class="max-w-7xl mx-auto">
 
             <!-- Success Toast -->
-            @if(session('success'))
-                <div
-                    x-data="{ show: true }"
-                    x-init="setTimeout(() => show = false, 3000)"
-                    x-show="show"
-                    x-transition
-                    class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
-                    <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl font-semibold flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ session('success') }}
-                    </div>
-                </div>
-            @endif
+           <x-notification class="mt-6"/>
 
             <!-- Header Section -->
             <div class="mb-6">
@@ -38,7 +24,7 @@
                             type="text"
                             name="student_search"
                             value="{{ request('student_search') }}"
-                            class="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                            class="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition"
                             placeholder="Search by name, student ID, or batch..."
                         />
                         @if(request('student_search'))
@@ -71,7 +57,7 @@
                     @if(request('student_search'))
                         <a
                             href="/dashboard/students-profile"
-                            class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
+                            class="inline-flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -84,7 +70,7 @@
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
 
                     <!-- Table Header -->
-                    <div class="bg-gradient-to-r from-violet-600 to-violet-700 px-6 py-4">
+                    <div class="bg-[#3a8a0f] px-6 py-4">
                         <div class="grid grid-cols-5 gap-4 text-white font-semibold text-sm">
                             <div class="text-center">STUDENT ID</div>
                             <div class="text-center">LAST NAME</div>
@@ -117,7 +103,7 @@
 
                                     <!-- Batch Name -->
                                     <div class="text-center">
-                                        <span class=" inline-flex items-center px-3 py-1 bg-violet-100 text-violet-800 rounded-full text-xs font-semibold">
+                                        <span class=" inline-flex items-center px-3 py-1 bg-violet-100 text-[#3a8a0f] rounded-full text-xs font-semibold">
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
                                             </svg>
@@ -130,7 +116,7 @@
                                         <!-- View Profile -->
                                         <a
                                             href="/dashboard/student/profile/{{ $student->id }}"
-                                            class="inline-flex items-center gap-1 px-4 py-2 bg-violet-100 text-violet-700 hover:bg-violet-200 rounded-lg font-medium transition text-sm"
+                                            class="inline-flex items-center gap-1 px-4 py-2 bg-violet-100 text-[#3a8a0f] hover:bg-green-200 rounded-lg font-medium transition text-sm"
                                             title="View profile"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

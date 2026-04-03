@@ -14,7 +14,7 @@
             <div class="max-w-7xl mx-auto px-6 py-4">
                 <div class="flex items-center gap-6">
                     <!-- Back Button -->
-                    <a href="/class_batch" class="flex items-center justify-center w-10 h-10 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition shadow-sm">
+                    <a href="/class_batch" class="flex items-center justify-center w-10 h-10 bg-[#3a8a0f] hover:bg-green-700 text-white rounded-lg transition shadow-sm">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
@@ -23,44 +23,20 @@
                     <!-- Title -->
                     <div class="flex-1">
                         <h1 class="text-2xl font-bold text-gray-800">{{ $class_batch->batch_name }}</h1>
-                        <p class="text-sm text-gray-500">Student Management</p>
                     </div>
 
-                    <!-- Add Student Button -->
-                    <a href="/class_batch/students/{{ $class_batch->id }}/create"
-                       class="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition transform hover:scale-105">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        Student
-                    </a>
                 </div>
             </div>
         </div>
 
         <!-- Success Toast -->
-        @if(session('success'))
-            <div
-                x-data="{ show: true }"
-                x-init="setTimeout(() => show = false, 3000)"
-                x-show="show"
-                x-transition
-                class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50"
-            >
-                <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl font-semibold flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    {{ session('success') }}
-                </div>
-            </div>
-        @endif
+        <x-notification class="mt-6"></x-notification>
 
         <!-- Main Content -->
         <main class="max-w-7xl mx-auto px-6 py-6">
 
             <!-- Search Bar -->
-            <div class="mb-6">
+            <div class="flex justify-between mb-6">
                 <form method="GET" class="relative">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -71,12 +47,32 @@
                         <input
                             type="text"
                             name="search_student"
-                            class="w-full md:w-96 pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                            class="w-full md:w-96 pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition"
                             placeholder="Search by name or student ID..."
                             value="{{ request('search_student') }}"
                         >
                     </div>
                 </form>
+
+                <div class="flex justify-center gap-2">
+                    <!-- Add Student Button -->
+                    <a href="/class_batch/students/{{ $class_batch->id }}/create"
+                       class="flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition transform hover:scale-105">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Student
+                    </a>
+
+                    <!-- Add Grades Button -->
+                    <a href="/class_batch/{{$class_batch->id}}/students/add-multiple/show"
+                       class="flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition transform hover:scale-105">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                       Grades
+                    </a>
+                </div>
             </div>
 
             @if($students->isEmpty())
@@ -94,7 +90,7 @@
                         @endif
                     </p>
                     <a href="/class_batch/students/{{ $class_batch->id }}/create"
-                       class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
+                       class="inline-flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
@@ -106,55 +102,63 @@
                 <!-- Students Table -->
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
                     <!-- Table Header -->
-                    <div class="bg-gradient-to-r from-violet-600 to-violet-700 px-6 py-4">
-                        <div class="grid grid-cols-6 gap-4 text-white font-semibold text-sm">
+                    <div class="bg-[#3a8a0f] px-6 py-4 text-center">
+                        <div class="grid grid-cols-[0.8fr_0.5fr_1fr_1.5fr_1fr_1fr_0.5fr_0.8fr_0.8fr_0.8fr] gap-1 text-white font-semibold text-sm">
                             <div>STUDENT ID</div>
+                            <div>SECTION</div>
                             <div>LAST NAME</div>
                             <div>FIRST NAME</div>
                             <div>MIDDLE NAME</div>
                             <div>GENDER</div>
-                            <div class="text-center">ACTIONS</div>
+                            <div>ACTIONS</div>
+                            <div>1ST SEM</div>
+                            <div>2ND SEM</div>
+                            <div>SUMMER</div>
                         </div>
                     </div>
 
                     <!-- Table Body -->
-                    <div class="divide-y divide-gray-200">
+                    <div class="divide-y divide-gray-200 text-center">
                         @foreach($students as $student)
                             <div class="px-6 py-4 hover:bg-gray-50 transition">
-                                <div class="grid grid-cols-6 gap-4 items-center">
+                                <div class="grid grid-cols-[0.8fr_0.5fr_1fr_1.5fr_1fr_1fr_0.5fr_0.8fr_0.8fr_0.8fr] gap-1 items-center text-center">
 
                                     <!-- Student ID -->
                                    <a href="/evaluation/{{$student->id}}" class="block cursor-pointer">
-                                       <div class="font-semibold text-gray-900 uppercase">
+                                       <div class=" font-semibold text-gray-900 uppercase">
                                            {{ $student->student_number }}
                                        </div>
                                    </a>
 
+                                    <div class="text-gray-800 uppercase">
+                                        {{ $student->section}}
+                                    </div>
+
                                     <!-- Last Name -->
                                     <a href="/evaluation/{{$student->id}}" class="block cursor-pointer">
-                                    <div class="text-gray-800 uppercase">
+                                    <div class=" text-gray-800 uppercase">
                                         {{ $student->last_name }}
                                     </div>
                                     </a>
 
                                     <!-- First Name -->
                                     <a href="/evaluation/{{$student->id}}" class="block cursor-pointer">
-                                    <div class="text-gray-800 uppercase">
+                                    <div class=" text-gray-800 uppercase">
                                         {{ $student->first_name }}
                                     </div>
                                     </a>
 
                                     <!-- Middle Name -->
                                     <a href="/evaluation/{{$student->id}}" class="block cursor-pointer">
-                                    <div class="text-gray-600 uppercase">
+                                    <div class=" text-gray-800 uppercase">
                                         {{ $student->middle_name ?? 'N/A' }}
                                     </div>
                                     </a>
 
                                     <!-- Gender -->
-                                    <div class="text-gray-700">
+                                    <div class="text-gray-700 text-center ml-6">
                                         @if($student->gender == 'Male')
-                                            <span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                                            <span class="inline-flex items-center  px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
                                                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                                                 </svg>
@@ -187,23 +191,25 @@
                                         </a>
 
                                         <!-- Move to Different Batch -->
-                                        <button
-                                            type="button"
-                                            @click="
-                                                moveOpen = true;
-                                                studentId = {{ $student->id }};
-                                                studentName = '{{ addslashes($student->first_name) }} {{ addslashes($student->last_name) }}';
-                                                targetBatchId = '';
-                                            "
-                                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md font-medium transition text-sm"
-                                            title="Move student"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />
-                                            </svg>
-                                        </button>
+{{--                                        <button--}}
+{{--                                            type="button"--}}
+{{--                                            @click="--}}
+{{--                                                moveOpen = true;--}}
+{{--                                                studentId = {{ $student->id }};--}}
+{{--                                                studentName = '{{ addslashes($student->first_name) }} {{ addslashes($student->last_name) }}';--}}
+{{--                                                targetBatchId = '';--}}
+{{--                                            "--}}
+{{--                                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md font-medium transition text-sm"--}}
+{{--                                            title="Move student"--}}
+{{--                                        >--}}
+{{--                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">--}}
+{{--                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />--}}
+{{--                                            </svg>--}}
+{{--                                        </button>--}}
 
                                         <!-- Delete -->
+                                        @auth
+                                            @if(auth()->user()->isAdmin())
                                         <button
                                             type="button"
                                             @click="
@@ -218,7 +224,51 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                             </svg>
                                         </button>
+                                                @endif
+                                            @endauth
                                     </div>
+
+                                    @php $enrollment = $student->enrollment; @endphp
+
+                                    {{-- 1st sem --}}
+                                    <div class="ml-2">
+                                        <div id="unenrolled-label-{{$student->id}}-1" class="mt-[-15px] mr-[15px] text-[10px] font-bold text-gray-500 {{ $enrollment?->{'1st_sem'} ? 'hidden' : '' }}">UNENROLLED</div>
+                                        <div id="enrolled-label-{{$student->id}}-1" class="mt-[-15px] mr-[26px] text-center text-[10px] ml-3 font-bold text-gray-500 {{ $enrollment?->{'1st_sem'} ? '' : 'hidden' }}">ENROLLED</div>
+                                        <div id="toggle-{{ $student->id }}-1"
+                                             onclick="switchMode({{ $student->id }}, 1)"
+                                             class="ml-2.5 relative flex items-center w-16 h-6 rounded-full cursor-pointer border border-gray-200 transition-all duration-300 ease-in-out select-none {{ $enrollment?->{'1st_sem'} ? 'bg-green-700' : 'bg-red-700' }}">
+                                            <div id="knob-{{ $student->id }}-1"
+                                                 class="absolute w-4.5 h-4.5 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out {{ $enrollment?->{'1st_sem'} ? 'left-[40px]' : 'left-1' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- 2nd sem --}}
+                                    <div class="ml-2">
+                                        <div id="unenrolled-label-{{$student->id}}-2" class="mt-[-15px] mr-[15px] text-[10px] font-bold text-gray-500 {{ $enrollment?->{'2nd_sem'} ? 'hidden' : '' }}">UNENROLLED</div>
+                                        <div id="enrolled-label-{{$student->id}}-2" class="mt-[-15px] mr-[26px] text-center text-[10px] ml-3 font-bold text-gray-500 {{ $enrollment?->{'2nd_sem'} ? '' : 'hidden' }}">ENROLLED</div>
+                                        <div id="toggle-{{ $student->id }}-2"
+                                             onclick="switchMode({{ $student->id }}, 2)"
+                                             class="ml-2.5 relative flex items-center w-16 h-6 rounded-full cursor-pointer border border-gray-200 transition-all duration-300 ease-in-out select-none {{ $enrollment?->{'2nd_sem'} ? 'bg-green-700' : 'bg-red-700' }}">
+                                            <div id="knob-{{ $student->id }}-2"
+                                                 class="absolute w-4.5 h-4.5 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out {{ $enrollment?->{'2nd_sem'} ? 'left-[40px]' : 'left-1' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Summer --}}
+                                    <div class="ml-2">
+                                        <div id="unenrolled-label-{{$student->id}}-3" class="mt-[-15px] mr-[15px] text-[10px] font-bold text-gray-500 {{ $enrollment?->summer ? 'hidden' : '' }}">UNENROLLED</div>
+                                        <div id="enrolled-label-{{$student->id}}-3" class="mt-[-15px] mr-[26px] text-center text-[10px] ml-3 font-bold text-gray-500 {{ $enrollment?->summer ? '' : 'hidden' }}">ENROLLED</div>
+                                        <div id="toggle-{{ $student->id }}-3"
+                                             onclick="switchMode({{ $student->id }}, 3)"
+                                             class="ml-2.5 relative flex items-center w-16 h-6 rounded-full cursor-pointer border border-gray-200 transition-all duration-300 ease-in-out select-none {{ $enrollment?->summer ? 'bg-green-700' : 'bg-red-700' }}">
+                                            <div id="knob-{{ $student->id }}-3"
+                                                 class="absolute w-4.5 h-4.5 rounded-full bg-white border border-gray-200 flex items-center justify-center transition-all duration-300 ease-in-out {{ $enrollment?->summer ? 'left-[40px]' : 'left-1' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -402,6 +452,45 @@
 
     </div>
 </x-layout>
+
+<script>
+    // map sem number to DB column name
+    const semMap = { 1: '1st_sem', 2: '2nd_sem', 3: 'summer' };
+
+    function switchMode(studentId, sem) {
+        const key = studentId + '-' + sem;
+        const toggle = document.getElementById('toggle-' + key);
+        const knob = document.getElementById('knob-' + key);
+        const enrolledLabel = document.getElementById('enrolled-label-' + key);
+        const unenrolledLabel = document.getElementById('unenrolled-label-' + key);
+
+        const isCurrentlyEnrolled = toggle.classList.contains('bg-green-700');
+
+        fetch(`/enrollment/${studentId}/toggle`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ sem: semMap[sem] }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.enrolled) {
+                    toggle.classList.replace('bg-red-700', 'bg-green-700');
+                    knob.classList.replace('left-1', 'left-[40px]');
+                    unenrolledLabel.classList.add('hidden');
+                    enrolledLabel.classList.remove('hidden');
+                } else {
+                    toggle.classList.replace('bg-green-700', 'bg-red-700');
+                    knob.classList.replace('left-[40px]', 'left-1');
+                    unenrolledLabel.classList.remove('hidden');
+                    enrolledLabel.classList.add('hidden');
+                }
+            })
+            .catch(() => alert('Failed to save. Please try again.'));
+    }
+</script>
 
 
 

@@ -2,34 +2,24 @@
     <div class="min-h-screen bg-gradient-to-br from-violet-50 to-violet-100 flex items-center justify-center p-6">
 
         <!-- Success Toast -->
-        @if(session('success'))
-            <div
-                x-data="{ show: true }"
-                x-init="setTimeout(() => show = false, 3000)"
-                x-show="show"
-                x-transition
-                class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
-                <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl font-semibold">
-                    {{ session('success') }}
-                </div>
-            </div>
-        @endif
+       <x-notification class="mt-6"/>
 
         <div class="w-full max-w-3xl">
             <!-- Back Button -->
-            <a href="/subjects" class="inline-flex items-center gap-2 text-violet-700 hover:text-violet-900 font-semibold mb-6 transition">
+            <a href="/subjects" class="inline-flex items-center gap-2 text-[#3a8a0f] hover:text-green-700 font-semibold mb-6 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 Back to Subjects
             </a>
 
+            <x-error-notification />
             <!-- Form Card -->
             <form action="/subject" method="POST" onsubmit="handleSubmit(event)" class="bg-white shadow-2xl rounded-2xl overflow-hidden">
                 @csrf
 
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-violet-600 to-violet-800 px-8 py-6">
+                <div class="bg-gradient-to-r from-[#005104] to-[#3a8a0f] px-8 py-6">
                     <h1 class="text-2xl font-bold text-white text-center">Add New Subject</h1>
                     <p class="text-violet-100 text-center text-sm mt-1">Create a new subject in the curriculum</p>
                 </div>
@@ -51,7 +41,7 @@
                                 name="course_code"
                                 required
                                 value="{{ old('course_code') }}"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition placeholder-gray-400 uppercase"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
                                 placeholder="e.g. IT 101"
                             />
                         </div>
@@ -67,7 +57,7 @@
                                 name="descriptive_title"
                                 required
                                 value="{{ old('descriptive_title') }}"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition placeholder-gray-400"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
                                 placeholder="e.g. Introduction to Programming"
                             />
                         </div>
@@ -76,7 +66,7 @@
                     <!-- Units Section -->
                     <div>
                         <h3 class="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-violet-600" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 text-[#3a8a0f]" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
                                 <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
                             </svg>
@@ -95,12 +85,13 @@
                                     name="total_units"
                                     required
                                     min="0"
-                                    step="0.5"
+                                    step="0.1"
                                     value="{{ old('total_units') }}"
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition text-center font-semibold"
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition text-center font-semibold"
                                     placeholder="3"
                                 />
                             </div>
+
 
                             <!-- Lecture Units -->
                             <div>
@@ -113,9 +104,9 @@
                                     name="lec_units"
                                     required
                                     min="0"
-                                    step="0.5"
+                                    step="0.1"
                                     value="{{ old('lec_units') }}"
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition text-center font-semibold"
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition text-center font-semibold"
                                     placeholder="2"
                                 />
                             </div>
@@ -131,9 +122,9 @@
                                     name="lab_units"
                                     required
                                     min="0"
-                                    step="0.5"
+                                    step="0.1"
                                     value="{{ old('lab_units') }}"
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition text-center font-semibold"
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition text-center font-semibold"
                                     placeholder="1"
                                 />
                             </div>
@@ -154,8 +145,9 @@
                                 name="hours_week"
                                 required
                                 min="0"
+                                step="0.1"
                                 value="{{ old('hours_week') }}"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition text-center font-semibold"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition text-center font-semibold"
                                 placeholder="3"
                             />
                         </div>
@@ -170,7 +162,7 @@
                                 id="pre_requisite"
                                 name="pre_requisite"
                                 value="{{ old('pre_requisite') }}"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition placeholder-gray-400"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
                                 placeholder="e.g. IT 100 or None"
                             />
                         </div>
@@ -179,7 +171,7 @@
                     <!-- Curriculum Details -->
                     <div>
                         <h3 class="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-violet-600" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 text-[#3a8a0f]" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
                             </svg>
                             Curriculum Placement
@@ -195,7 +187,7 @@
                                     id="year_level"
                                     name="year_level"
                                     required
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition appearance-none cursor-pointer text-center font-semibold">
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition appearance-none cursor-pointer text-center font-semibold">
                                     <option value="1" {{ old('year_level') == '1' ? 'selected' : '' }}>1st Year</option>
                                     <option value="2" {{ old('year_level') == '2' ? 'selected' : '' }}>2nd Year</option>
                                     <option value="3" {{ old('year_level') == '3' ? 'selected' : '' }}>3rd Year</option>
@@ -212,7 +204,7 @@
                                     id="semester"
                                     name="semester"
                                     required
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition appearance-none cursor-pointer text-center font-semibold">
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition appearance-none cursor-pointer text-center font-semibold">
                                     <option value="1" {{ old('semester') == '1' ? 'selected' : '' }}>1st Sem</option>
                                     <option value="2" {{ old('semester') == '2' ? 'selected' : '' }}>2nd Sem</option>
                                 </select>
@@ -227,7 +219,7 @@
                                     id="curriculum"
                                     name="curriculum"
                                     required
-                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition appearance-none cursor-pointer text-center font-semibold">
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition appearance-none cursor-pointer text-center font-semibold">
                                     @for($year = 2022; $year <= date('Y'); $year++)
                                         <option value="{{ $year }}-{{ $year + 1 }}" {{ old('curriculum') == "$year-".($year+1) ? 'selected' : '' }}>
                                             {{ $year }}-{{ $year + 1 }}
@@ -239,11 +231,11 @@
                     </div>
 
                     <!-- Info Box -->
-                    <div class="bg-violet-50 border border-violet-200 rounded-lg p-4 flex gap-3">
-                        <svg class="w-5 h-5 text-violet-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="bg-green-50 border border-[#3a8a0f] rounded-lg p-4 flex gap-3">
+                        <svg class="w-5 h-5 text-[#3a8a0f] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                         </svg>
-                        <div class="text-sm text-violet-800">
+                        <div class="text-sm text-[#3a8a0f]">
                             <p class="font-semibold mb-1">Subject Information</p>
                             <p>Ensure all units and hours are accurately entered. The total units should equal the sum of lecture and lab units.</p>
                         </div>
@@ -253,13 +245,13 @@
 
                 <!-- Form Footer -->
                 <div class="bg-gray-50 px-8 py-6 flex gap-3 justify-end border-t border-gray-200">
-                    <a href="/subject" class="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">
+                    <a href="/subjects" class="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition">
                         Cancel
                     </a>
                     <button
                         type="submit"
                         id="submitBtn"
-                        class="px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-lg shadow-lg transition transform hover:scale-105 active:scale-95">
+                        class="px-6 py-3 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition transform hover:scale-105 active:scale-95">
                         Add Subject
                     </button>
                 </div>

@@ -16,9 +16,10 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(ClassBatch::class)->constrained()->cascadeOnDelete();
             $table->string('student_number')->unique();
+            $table->string('section');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             // composite unique key
             $table->unique(
                 ['first_name', 'middle_name', 'last_name'],

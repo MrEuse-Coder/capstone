@@ -1,8 +1,65 @@
 <x-layout>
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center gap-6">
+                <!-- Back Button -->
+                <a href="{{url()->previous()}}" class="flex items-center justify-center w-10 h-10 bg-[#3a8a0f] hover:bg-green-700 text-white rounded-lg transition shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </a>
+
+
+
+            </div>
+        </div>
+    </div>
+
     <div class="min-h-screen bg-gray-50 p-6">
+        <div class="flex justify-center mt-4 gap-2">
+            <!-- Print Button -->
+            <div class="fixed z-50 right-1 bottom-20">
+                <div class="flex flex-col justify-center mt-8 gap-2">
+                    <button
+                        type="submit"
+                        form="form"
+                        id="submitBtn"
+                        class="bg-[#3a8a0f] gap-1 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition transform hover:scale-105 inline-flex items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+                        </svg>
+                        Refresh
+                    </button>
+
+                    <a href="/evaluation/{{ $student->id }}/pdf"
+                       class="bg-[#3a8a0f] gap-1 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition transform hover:scale-105 inline-flex items-center">
+                        <svg class=" w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2 2 2 0 0 0 2 2h12a2 2 0 0 0 2-2 2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V4a2 2 0 0 0-2-2h-7Zm-6 9a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h.5a2.5 2.5 0 0 0 0-5H5Zm1.5 3H6v-1h.5a.5.5 0 0 1 0 1Zm4.5-3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1.376A2.626 2.626 0 0 0 15 15.375v-1.75A2.626 2.626 0 0 0 12.375 11H11Zm1 5v-3h.375a.626.626 0 0 1 .625.626v1.748a.625.625 0 0 1-.626.626H12Zm5-5a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1h1a1 1 0 1 0 0-2h-2Z" clip-rule="evenodd"/>
+                        </svg>
+
+                        Download
+                    </a>
+
+                    <a href="/evaluation/{{ $student->id }}/pdf_print"
+                       target="_blank"
+                       class="bg-[#3a8a0f] gap-1 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition transform hover:scale-105 inline-flex items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M16.444 18H19a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h2.556M17 11V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v6h10ZM7 15h10v4a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4Z"/>
+                        </svg>
+
+                        Print
+                    </a>
+                </div>
+            </div>
+
+
+
+        </div>
+
         <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-8">
 
-            <!-- Header with Logo -->
+          {{--  <!-- Header with Logo -->
             <div class="text-center mb-6">
                 <img
                     src="https://i.postimg.cc/vm3zNzrV/essu-new-logo-header-2-removebg-preview.png"
@@ -11,30 +68,30 @@
                 >
 
                 <h1 class="text-2xl font-bold text-gray-800 mb-2">
-                    BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY (BSIT)
+                {{$template->bachelors_degree?? ''}}
                 </h1>
-                <p class="text-gray-600 text-sm">Effective SY 2022-2023</p>
+                <p class="text-gray-600 text-sm">Effective SY {{$template->curriculum?? ''}}</p>
                 <p class="text-gray-500 text-xs">
                     (Revised per CMO 25 S 2015, CHED CMO 20 S of 2013 and CHED CMO 04 s 2018)
                 </p>
-            </div>
+            </div>--}}
 
             <!-- Student Information Card -->
-            <div class="bg-gradient-to-r from-violet-50 to-violet-100 rounded-lg p-6 mb-6 border border-violet-200">
+            <div class="bg-[#3a8a0f] rounded-lg p-6 mb-6 border border-[#3a8a0f]">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <span class="text-gray-600 font-medium">Name:</span>
-                        <span class="font-bold text-gray-900 ml-2 uppercase">
+                        <span class="text-white font-medium">Name:</span>
+                        <span class="font-bold text-white ml-2 uppercase">
                             {{ $student->last_name }}, {{ $student->first_name }} {{ substr($student->middle_name, 0, 1) }}.
                         </span>
                     </div>
                     <div>
-                        <span class="text-gray-600 font-medium">Sex:</span>
-                        <span class="font-bold text-gray-900 ml-2 uppercase">{{ $student->gender }}</span>
+                        <span class="text-white font-medium">Sex:</span>
+                        <span class="font-bold text-white ml-2 uppercase">{{ substr($student->gender ,0,1) }}</span>
                     </div>
                     <div class="md:col-span-2">
-                        <span class="text-gray-600 font-medium">Student No:</span>
-                        <span class="font-bold text-gray-900 ml-2 uppercase">{{ $student->student_number }}</span>
+                        <span class="text-white font-medium">Student No:</span>
+                        <span class="font-bold text-white ml-2 uppercase">{{ $student->student_number }}</span>
                     </div>
                 </div>
             </div>
@@ -64,14 +121,14 @@
                 <!-- Academic Records -->
             @foreach($academicStructure as $yearData)
                 <!-- Year Header -->
-                <div class="bg-violet-600 text-white font-bold text-lg px-6 py-3 rounded-t-lg mt-8">
+                <div class="bg-[#3a8a0f] text-white font-bold text-lg px-6 py-3 rounded-t-lg mt-8">
                     {{ $yearData['year'] }}
                 </div>
 
                 @foreach($yearData['semesters'] as $semesterData)
                     @if($semesterData['subjects']->count() > 0)
                         <!-- Semester Subheader -->
-                        <div class="bg-violet-100 text-violet-800 font-semibold px-6 py-2 border-l-4 border-violet-600">
+                        <div class="bg-green-100 text-[#3a8a0f] font-semibold px-6 py-2 border-l-4 border-[#3a8a0f]">
                             {{ $semesterData['title'] }}
                         </div>
 
@@ -98,8 +155,15 @@
                                                 $midterm = $subject->pivot->midterm ?? 0;
                                                 $final = $subject->pivot->final ?? 0;
                                                 $average = ($midterm + $final) / 2;
+                                                $final_grade = $subject->pivot->final_grade ;
                                             @endphp
-                                            {{ number_format($average, 1) }}
+                                            @if($final_grade)
+                                                {{$final_grade}}
+                                            @elseif(!$midterm || !$final)
+
+                                            @else
+                                                {{ number_format($average, 1) }}
+                                            @endif
                                         </td>
                                         <td class="px-4 py-3 text-gray-800 border-r font-medium uppercase">
                                             {{ $subject->course_code }}
@@ -107,10 +171,18 @@
                                         <td class="px-4 py-3 text-gray-800 border-r text-left">
                                             {{ $subject->descriptive_title }}
                                         </td>
-                                        <td class="px-4 py-3 text-gray-800 border-r">{{ $subject->total_units }}</td>
-                                        <td class="px-4 py-3 text-gray-800 border-r">{{ $subject->lec_units }}</td>
-                                        <td class="px-4 py-3 text-gray-800 border-r">{{ $subject->lab_units }}</td>
-                                        <td class="px-4 py-3 text-gray-800 border-r">{{ $subject->hours_week }}</td>
+                                        <td class="px-4 py-3 text-gray-800 border-r">
+                                            {{ ($u = $subject->total_units) == floor($u) ? floor($u) : number_format($u, 1) }}
+                                        </td>
+                                        <td class="px-4 py-3 text-gray-800 border-r">
+                                            {{ ($u = $subject->lec_units) == floor($u) ? floor($u) : number_format($u, 1) }}
+                                        </td>
+                                        <td class="px-4 py-3 text-gray-800 border-r">
+                                            {{ ($u = $subject->lab_units) == floor($u) ? floor($u) : number_format($u, 1) }}
+                                        </td>
+                                        <td class="px-4 py-3 text-gray-800 border-r">
+                                            {{ ($u = $subject->hours_week) == floor($u) ? floor($u) : number_format($u, 1) }}
+                                        </td>
                                         <td class="px-4 py-3 text-gray-800 text-sm">
                                             {{ $subject->pre_requisite ?? 'None' }}
                                         </td>
@@ -118,21 +190,34 @@
                                 @endforeach
 
                                 <!-- Total Row -->
-                                <tr class="bg-violet-50 font-bold text-center text-sm border-t-2 border-violet-300">
+                                <tr class="bg-green-50 font-bold text-center text-sm border-t-2 border-[#3a8a0f]">
                                     <td class="px-4 py-3 border-r"></td>
                                     <td class="px-4 py-3 border-r"></td>
-                                    <td class="px-4 py-3 text-right border-r text-violet-800">TOTAL</td>
-                                    <td class="px-4 py-3 border-r text-violet-800">
-                                        {{ $semesterData['subjects']->sum('total_units') }}
+                                    <td class="px-4 py-3 text-right border-r text-[#3a8a0f]">TOTAL</td>
+                                    <td class="px-4 py-3 border-r text-[#3a8a0f]">
+                                        @php
+                                            $total = $semesterData['subjects']->sum('total_units');
+                                        @endphp
+                                        {{ (floor($total) == $total) ? $total : number_format($total, 1) }}
                                     </td>
-                                    <td class="px-4 py-3 border-r text-violet-800">
-                                        {{ $semesterData['subjects']->sum('lec_units') }}
+
+                                    <td class="px-4 py-3 border-r text-[#3a8a0f]">
+                                        @php
+                                            $total = $semesterData['subjects']->sum('lec_units');
+                                        @endphp
+                                        {{ (floor($total) == $total) ? $total : number_format($total, 1) }}
                                     </td>
-                                    <td class="px-4 py-3 border-r text-violet-800">
-                                        {{ $semesterData['subjects']->sum('lab_units') }}
+                                    <td class="px-4 py-3 border-r text-[#3a8a0f]">
+                                        @php
+                                            $total = $semesterData['subjects']->sum('lab_units');
+                                        @endphp
+                                        {{ (floor($total) == $total) ? $total : number_format($total, 1) }}
                                     </td>
-                                    <td class="px-4 py-3 border-r text-violet-800">
-                                        {{ $semesterData['subjects']->sum('hours_week') }}
+                                    <td class="px-4 py-3 border-r text-[#3a8a0f]">
+                                        @php
+                                            $total = $semesterData['subjects']->sum('hours_week');
+                                        @endphp
+                                        {{ (floor($total) == $total) ? $total : number_format($total, 1) }}
                                     </td>
                                     <td class="px-4 py-3"></td>
                                 </tr>
@@ -143,20 +228,129 @@
                 @endforeach
             @endforeach
 
-            <!-- Print Button (optional) -->
-            <div class="flex justify-center mt-8 gap-2">
-                <button
-                    class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:scale-105">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block w-5 h-5 mr-2" >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                    </svg>
 
-                    Download PDF
-                </button>
-            </div>
         </div>
     </div>
 
+    {{--REload subjects--==========================================--}}
+    <form action="/class_batch/students/{{ $student->id }}/reload"
+          method="POST"
+          class="max-w-7xl mx-auto p-6 hidden"
+          id="form"
+          onsubmit="handleSubmit(event)">
+        @csrf
+
+
+            <!-- Table Header -->
+            <div class="bg-gradient-to-r from-violet-600 to-violet-700 rounded-t-lg p-4 mb-1 shadow-md sticky top-0 z-10">
+                <div class="grid grid-cols-3 text-white font-bold text-center items-center">
+                    <div class="flex justify-center gap-4">
+                        <div class="w-32">MIDTERM</div>
+                        <div class="w-32">FINALS</div>
+                        <div class="w-32">FINAL GRADE</div>
+                    </div>
+                    <div>COURSE CODE</div>
+                    <div>DESCRIPTIVE TITLE</div>
+                </div>
+            </div>
+
+            <!-- Subjects by Year and Semester -->
+            @php
+                $yearSemesters = [
+                    ['year' => 'FIRST YEAR', 'semesters' => [
+                        ['title' => 'First Semester', 'subjects' => $subjectsYear1Sem1],
+                        ['title' => 'Second Semester', 'subjects' => $subjectsYear1Sem2]
+                    ]],
+                    ['year' => 'SECOND YEAR', 'semesters' => [
+                        ['title' => 'First Semester', 'subjects' => $subjectsYear2Sem1],
+                        ['title' => 'Second Semester', 'subjects' => $subjectsYear2Sem2]
+                    ]],
+                    ['year' => 'THIRD YEAR', 'semesters' => [
+                        ['title' => 'First Semester', 'subjects' => $subjectsYear3Sem1],
+                        ['title' => 'Second Semester', 'subjects' => $subjectsYear3Sem2]
+                    ]],
+                    ['year' => 'FOURTH YEAR', 'semesters' => [
+                        ['title' => 'First Semester', 'subjects' => $subjectsYear4Sem1],
+                        ['title' => 'Second Semester', 'subjects' => $subjectsYear4Sem2]
+                    ]]
+                ];
+            @endphp
+
+            @foreach($yearSemesters as $yearData)
+                <!-- Year Header -->
+                <div class="bg-violet-100 border-l-4 border-violet-600 px-4 py-3 mt-6 mb-3 rounded">
+                    <h2 class="text-xl font-bold text-violet-900">{{ $yearData['year'] }}</h2>
+                </div>
+
+                @foreach($yearData['semesters'] as $semesterData)
+                    @if(count($semesterData['subjects']) > 0)
+                        <!-- Semester Header -->
+                        <div class="bg-gray-100 px-4 py-2 mb-2 rounded">
+                            <h3 class="text-lg font-semibold text-gray-700">{{ $semesterData['title'] }}</h3>
+                        </div>
+
+                        <!-- Subject List -->
+                        <div class="space-y-2 mb-4">
+                            @foreach($semesterData['subjects'] as $subject)
+                                <div class="grid grid-cols-3 items-center bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
+
+                                    @php
+                                        // Get the pivot data for this student
+                                        $studentSubject = $subject->students->first();
+                                        $midterm = $studentSubject->pivot->midterm ?? '';
+                                        $final = $studentSubject->pivot->final ?? '';
+                                        $final_grade = $studentSubject->pivot->final_grade ?? '';
+                                    @endphp
+
+                                        <!-- Grades Input -->
+                                    <div class="flex justify-center gap-4">
+                                        <input type="text"
+                                               name="midterm[{{ $subject->id }}]"
+                                               class="w-32 px-3 py-2 bg-violet-50 border border-violet-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                                               placeholder="0.0"
+                                               value="{{ $midterm}}"
+                                               pattern="[0-9]*\.?[0-9]*"
+                                               maxlength="4"/>
+
+                                        <input type="text"
+                                               name="final[{{ $subject->id }}]"
+                                               class="w-32 px-3 py-2 bg-violet-50 border border-violet-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                                               placeholder="0.0"
+                                               value="{{ $final}}"
+                                               pattern="[0-9]*\.?[0-9]*"
+                                               maxlength="4"/>
+
+                                                                                    final grade input
+                                        <input type="text"
+                                               name="final_grade[{{ $subject->id }}]"
+                                               class="w-32 px-3 py-2 bg-violet-50 border border-violet-200 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                                               placeholder="0.0"
+                                               value="{{ $final_grade}}"
+                                        />
+                                    </div>
+
+                                    <!-- Course Code -->
+                                    <div class="text-center">
+                                            <span class="inline-block px-3 py-1 bg-violet-100 text-violet-800 font-bold rounded-md uppercase text-sm">
+                                                {{ $subject->course_code }}
+                                            </span>
+                                    </div>
+
+                                    <!-- Descriptive Title -->
+                                    <div class="text-center">
+                                            <span class="font-semibold text-gray-800 uppercase text-sm">
+                                                {{ $subject->descriptive_title }}
+                                            </span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                @endforeach
+            @endforeach
+
+
+    </form>
 
 </x-layout>
 

@@ -3,31 +3,15 @@
 
         <div class="w-full max-w-lg">
             <!-- Back Button -->
-            <a href="/class_batch/students/{{ $class_batch->id }}" class="inline-flex items-center gap-2 text-violet-700 hover:text-violet-900 font-semibold mb-6 transition">
+            <a href="/class_batch/students/{{ $class_batch->id }}" class="inline-flex items-center gap-2 text-[#3a8a0f] hover:text-green-700 font-semibold mb-6 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Back to Students
+                Back
             </a>
 
             <!-- Show all errors at top -->
-            @if ($errors->any())
-                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                    <div class="flex items-start gap-3">
-                        <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                        </svg>
-                        <div>
-                            <h3 class="font-semibold text-red-800 mb-2">Please fix the following errors:</h3>
-                            <ul class="list-disc list-inside text-sm text-red-700 space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            @endif
+           <x-error-notification></x-error-notification>
 
 
             <!-- Form Card -->
@@ -35,7 +19,7 @@
                 @csrf
 
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-violet-600 to-violet-800 px-8 py-6">
+                <div class="bg-gradient-to-r from-[#005104] to-[#3a8a0f] px-8 py-6">
                     <h1 class="text-2xl font-bold text-white text-center">Add New Student</h1>
                     <p class="text-violet-100 text-center text-sm mt-1">
                         Adding to <span class="font-semibold">{{ $class_batch->batch_name }}</span>
@@ -53,19 +37,33 @@
                         <input
                             type="text"
                             id="student_number"
+                            pattern="\d{2}-\d{4}"
                             name="student_number"
                             required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition placeholder-gray-400"
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
                             placeholder="e.g. 22-0026"
                         />
                         <p class="text-xs text-gray-500 mt-1">Enter the student's unique ID number</p>
                     </div>
-                    @error('student_number')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <x-error-message name="student_number"/>
 
                     <!-- Name Fields Grid -->
                     <div class="space-y-4">
+
+                        <!-- Section -->
+                        <div>
+                            <label for="section" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Section <span class="text-red-500">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="section"
+                                name="section"
+                                required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
+                                placeholder="e.g. A"
+                            />
+                        </div>
 
                         <!-- First Name -->
                         <div>
@@ -77,7 +75,7 @@
                                 id="first_name"
                                 name="first_name"
                                 required
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition placeholder-gray-400"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
                                 placeholder="e.g. Juan"
                             />
                         </div>
@@ -92,7 +90,7 @@
                                 id="last_name"
                                 name="last_name"
                                 required
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition placeholder-gray-400"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
                                 placeholder="e.g. Dela Cruz"
                             />
                         </div>
@@ -106,7 +104,7 @@
                                 type="text"
                                 id="middle_name"
                                 name="middle_name"
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition placeholder-gray-400"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition placeholder-gray-400"
                                 placeholder="e.g. Santos"
                             />
                         </div>
@@ -119,8 +117,7 @@
                             <select
                                 id="gender"
                                 name="gender"
-                                required
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition appearance-none cursor-pointer">
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition appearance-none cursor-pointer">
                                 <option value="" disabled selected>Select gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
@@ -130,11 +127,11 @@
                     </div>
 
                     <!-- Info Box -->
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
-                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 flex gap-3">
+                        <svg class="w-5 h-5 text-[#3a8a0f] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                         </svg>
-                        <div class="text-sm text-blue-800">
+                        <div class="text-sm text-[#3a8a0f]">
                             <p class="font-semibold mb-1">Student Information</p>
                             <p>Please ensure all required information is accurate before submitting. You can add grades for this student after creation.</p>
                         </div>
@@ -150,7 +147,7 @@
                     <button
                         type="submit"
                         id="submitBtn"
-                        class="px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-lg shadow-lg transition transform hover:scale-105 active:scale-95">
+                        class="px-6 py-3 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition transform hover:scale-105 active:scale-95">
                         Add Student
                     </button>
                 </div>

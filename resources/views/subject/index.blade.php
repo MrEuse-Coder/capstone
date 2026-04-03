@@ -23,7 +23,7 @@
                             type="text"
                             name="search_subject"
                             value="{{ request('search_subject') }}"
-                            class="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition"
+                            class="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition"
                             placeholder="Search by title..."
                         />
                         @if(request('search_subject'))
@@ -40,27 +40,16 @@
 
                 <!-- Add Subject Button -->
                 <a href="/subject/create"
-                   class="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+                   class="flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition transform hover:scale-105">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
-                    Add Subject
+                    Subject
                 </a>
             </div>
 
             <!-- Success Toast -->
-            @if(session('success'))
-                <div
-                    x-data="{ show: true }"
-                    x-init="setTimeout(() => show = false, 3000)"
-                    x-show="show"
-                    x-transition
-                    class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
-                    <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-xl font-semibold">
-                        {{ session('success') }}
-                    </div>
-                </div>
-            @endif
+            <x-notification class="mt-6"/>
 
             @if($subjects->isEmpty())
                 <!-- Empty State -->
@@ -79,7 +68,7 @@
                     @if(request('search_subject'))
                         <a
                             href="/subjects"
-                            class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
+                            class="inline-flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -88,7 +77,7 @@
                     @else
                         <a
                             href="/subject/create"
-                            class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
+                            class="inline-flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -101,7 +90,7 @@
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
 
                     <!-- Table Header -->
-                    <div class="bg-gradient-to-r from-violet-600 to-violet-700 px-6 py-4 overflow-x-auto">
+                    <div class="bg-[#3a8a0f] px-6 py-4 overflow-x-auto">
                         <div class="grid grid-cols-7 gap-3 text-white font-semibold text-xs min-w-max">
                             <div>COURSE CODE</div>
                             <div class="">DESCRIPTIVE TITLE</div>
@@ -120,7 +109,7 @@
                                 <div class="grid grid-cols-7 gap-3 items-center min-w-max text-sm">
 
                                     <!-- Course Code -->
-                                    <div class="font-bold text-violet-700 uppercase">
+                                    <div class="font-bold text-black uppercase">
                                         {{ $subject->course_code }}
                                     </div>
 
@@ -167,23 +156,17 @@
 
                                         </a>
 
-                                        <!-- Delete Button (commented out but improved) -->
-                                        <button
-                                            onclick="confirmDelete({{ $subject->id }}, '{{ addslashes($subject->course_code) }}')"
-                                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-md font-medium transition text-xs"
+                                         <button
+                                           data-id="{{$subject->id}}"
+                                           data-name="{{$subject->descriptive_title}}"
+                                            class="deleteBtn inline-flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-md font-medium transition text-xs"
                                             title="Delete subject"
                                         >
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                             </svg>
-
                                         </button>
 
-                                        <!-- Hidden delete form -->
-                                        <form id="delete-form-{{ $subject->id }}" action="/subject/{{ $subject->id }}" method="POST" class="hidden">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -202,13 +185,85 @@
         </div>
     </div>
 
+
+
+    {{--modal body--}}
+    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 hidden">  <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl">
+            <!-- Modal Header -->
+            <div class="flex items-start gap-4 mb-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-gray-900 mb-1">
+                        Delete Subject
+                    </h2>
+                    <p class="text-sm text-gray-600">
+                        This action cannot be undone.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <p class="text-gray-700">
+                    Are you sure you want to delete
+                    <span class="font-bold text-gray-900 uppercase" id="subjectName"></span>?
+                    All associated students and grades will be permanently removed.
+                </p>
+            </div>
+
+            <!-- Modal Actions -->
+            <form id="deleteForm" method="POST">
+
+                @csrf
+                @method('DELETE')
+
+                <div class="flex gap-3 justify-end">
+                    <button
+                        type="button"
+                        id="closeModal"
+                        class="px-4 py-2 rounded-lg bg-white border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition flex items-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Delete Subject
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Script -->
     <script>
-        function confirmDelete(id, courseCode) {
-            if (confirm(`Are you sure you want to delete ${courseCode}? This action cannot be undone.`)) {
-                document.getElementById(`delete-form-${id}`).submit();
-            }
-        }
+
+        let modal = document.getElementById('modal');
+        let closeModal = document.getElementById('closeModal')
+
+        document.querySelectorAll('.deleteBtn').forEach(button => {
+            button.addEventListener("click",() => {
+            let id = button.dataset.id;
+            let name = button.dataset.name;
+
+            modal.classList.remove('hidden');
+
+            subjectName.textContent = name;
+
+            deleteForm.action = '/subject/' + id;
+
+            })
+        })
+        closeModal.onclick = () => modal.classList.add('hidden')
     </script>
 </x-sidebar>
 

@@ -9,7 +9,7 @@ class Subject extends Model
 {
     protected $guarded = [];
     //
-    public function courseCode(): Attribute{
+    /*public function courseCode(): Attribute{
         return Attribute::make(
             set: fn($value) => strtoupper($value)
         );
@@ -27,11 +27,11 @@ class Subject extends Model
         return Attribute::make(
           set: fn($value) => ucwords(strtolower($value))
         );
-    }
+    }*/
 
     public function students(){
         return $this->belongsToMany(Student::class, 'grades')
-            ->withPivot('midterm', 'final')
+            ->withPivot('midterm', 'final','final_grade')
             ->withTimestamps();
     }
 

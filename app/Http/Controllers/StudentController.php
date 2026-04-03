@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\ClassBatch;
+use App\Models\Grade;
 use App\Models\Student;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -40,24 +43,21 @@ class StudentController extends Controller
      */
     public function store(ClassBatch $class_batch, Request $request)
     {
-        //
-       $attrs = request()->validate([
-           'student_number' => 'required','unique',
-           'first_name' => 'required',
-           'last_name' => 'required',
-           'middle_name' => 'required',
-           'gender' => 'required',
+        // Validate the request
+        $attrs = $request->validate([
+            'student_number' => 'required|unique:students,student_number|regex:/^\d{2}-\d{4}$/',
+            'section' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'middle_name' => 'nullable',
+            'gender' => 'nullable',
         ]);
-
-       $existingStudentNumber = Student::where('student_number', $attrs['student_number'])->first();
-       if ($existingStudentNumber) {
-           return back()->withErrors(['student_number' => 'Student number already exists.']);
-       }
 
         // Check for duplicate full name in the same batch
         $existingStudent = Student::where('first_name', $request->first_name)
             ->where('last_name', $request->last_name)
             ->where('middle_name', $request->middle_name)
+            ->where('class_batch_id', $class_batch->id) // ensure it's the same batch
             ->first();
 
         if ($existingStudent) {
@@ -68,14 +68,36 @@ class StudentController extends Controller
                 ]);
         }
 
-       $attrs['class_batch_id'] = $class_batch->id;
+        // Assign class batch
+        $attrs['class_batch_id'] = $class_batch->id;
 
-       Student::create($attrs);
+        // Create student
+        $student = Student::create($attrs);
 
-       return redirect('/class_batch/students/'.$class_batch->id)->with('success','Student added successfully');
+        // Get all subject IDs
+        $subjectIds = Subject::pluck('id');
 
+        // Create grades for each subject
+        foreach ($subjectIds as $subjectId) {
+            Grade::updateOrCreate(
+                [
+                    'student_id' => $student->id,
+                    'subject_id' => $subjectId
+                ]
+            );
+        }
 
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'role' => auth()->user()->role,
+            'action' => 'Added Student',
+            'details' => $student->student_number.' | '.$student->first_name.' '.$student->middle_name.' '.$student->last_name
+        ]);
+
+        return redirect('/class_batch/students/'.$class_batch->id)
+            ->with('success', 'Student added successfully');
     }
+
 
     /**
      * Display the specified resource.
@@ -124,6 +146,12 @@ class StudentController extends Controller
         $batchId = $student->class_batch->id;
         $student->grades()->delete();
         $student->delete();
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'role' => auth()->user()->role,
+            'action' => 'Deleted Student',
+            'details' => $student->student_number.' | '.$student->first_name.' '.$student->middle_name.' '.$student->last_name
+        ]);
         return redirect()->route('class_batch_students.index', $batchId);
     }
 }

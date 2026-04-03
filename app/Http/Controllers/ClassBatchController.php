@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\ClassBatch;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClassBatchController extends Controller
 {
@@ -13,15 +16,25 @@ class ClassBatchController extends Controller
     public function index(Request $request)
     {
         //for the dropdown list of class year batches
-        $classSchoolYears = ClassBatch::select('school_year')->distinct()->orderBy('school_year')->pluck('school_year');
+        $classSchoolYears = ClassBatch::where('admin_id', auth()->id())
+            ->select('school_year')
+            ->distinct()
+            ->orderBy('school_year')
+            ->pluck('school_year');
 
         //counting no. of students
         //getting the value of the dropdown and query it
-        $classBatches = ClassBatch::withCount('students')->when($request->filled('school_year'), function ($query) use ($request) {$query->where('school_year', $request->school_year);
+        $classBatches = ClassBatch::withCount('students')->when($request->filled('school_year'), function ($query) use ($request) {$query->where('school_year', $request->school_year)->where('admin_id', auth()->user()->id);
         });
 
+        $user = Auth::user();
+
+        $adminId = $user->role === 'admin'
+            ? $user->id
+            : $user->admin_id;
+
         //get the filtered class batches
-        $classBatches = $classBatches->get();
+        $classBatches = $classBatches->where('admin_id', $adminId)->latest()->get();
 
         return view('class_batch.index', compact('classBatches',  'classSchoolYears'));
     }
@@ -42,14 +55,39 @@ class ClassBatchController extends Controller
     {
         //
         $attrs = $request->validate([
-            'batch_name' => 'required',
+            'batch_name' => 'required|unique:class_batches,batch_name',
             'school_year' => 'required',
-            'adviser' => 'required',
             'curriculum' => 'required',
         ]);
 
+        if(auth()->user()->role === 'admin'){
+            $attrs['admin_id'] = auth()->id();
+        }else if(auth()->user()->role === 'user'){
+            $attrs['admin_id'] = auth()->user()->admin_id;
+        }
+
         ClassBatch::create($attrs);
 
+        $user = session()->has('impersonator_id')
+            ? User::find(session('impersonator_id')) // super admin
+            : auth()->user(); // normal user
+
+        $actor = auth()->user(); // current logged-in (admin if impersonating)
+
+        if (session()->has('impersonator_id')) {
+            $superAdmin = User::find(session('impersonator_id'));
+
+            $action ='Added Batch (through ' . $actor->name.')';
+        } else {
+            $action = 'Added Batch';
+        }
+
+        ActivityLog::create([
+           'user' => $user->name,
+           'role' => $user->role,
+           'action' => $action,
+            'details' => $attrs['batch_name']
+        ]);
         return redirect('/class_batch')->with('success', 'Batch created');
     }
 
@@ -89,6 +127,13 @@ class ClassBatchController extends Controller
 
         $classBatch->students()->delete();
         $classBatch->delete();
+
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'role' => auth()->user()->role,
+            'action' => 'Deleted Batch',
+            'details' => $classBatch->batch_name
+        ]);
         return redirect('/class_batch')->with('success', 'Batch deleted');
     }
 }

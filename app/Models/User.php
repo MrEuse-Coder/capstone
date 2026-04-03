@@ -19,10 +19,28 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'college',
+        'admin_id',
         'email',
         'password',
+        'role',
     ];
 
+    public function isUser(){
+        return $this->role === 'user';
+    }
+
+    public function isAdminisSuperAdmin(){
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    public function isAdmin(){
+        return $this->role === 'admin';
+    }
+
+    public function isSuperAdmin(){
+        return $this->role === 'super_admin';
+    }
     public function class_batch(){
         return $this->hasMany(ClassBatch::class);
     }

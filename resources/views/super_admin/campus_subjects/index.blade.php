@@ -1,0 +1,271 @@
+<x-sidebar>
+    <div class="min-h-screen bg-gray-50 p-6">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- Header Section -->
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Subjects Management</h1>
+                <p class="text-gray-600">Manage curriculum subjects and courses</p>
+            </div>
+
+            <!-- Search and Add Section -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+
+                <!-- Search Bar -->
+                <form method="GET" action="/subjects" class="relative flex-1 max-w-md">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input
+                            type="text"
+                            name="search_subject"
+                            value="{{ request('search_subject') }}"
+                            class="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3a8a0f] focus:border-transparent transition"
+                            placeholder="Search by title..."
+                        />
+                        @if(request('search_subject'))
+                            <a
+                                href="/subjects"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </a>
+                        @endif
+                    </div>
+                </form>
+
+                <!-- Add Subject Button -->
+                <a href="/subject/create"
+                   class="flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Subject
+                </a>
+            </div>
+
+            <!-- Success Toast -->
+            <x-notification class="mt-6"/>
+
+            @if($subjects->isEmpty())
+                <!-- Empty State -->
+                <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+                    <svg class="mx-auto h-20 w-20 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No Subjects Found</h3>
+                    <p class="text-gray-500 mb-6">
+                        @if(request('search_subject'))
+                            No subjects match your search "{{ request('search_subject') }}"
+                        @else
+                            Start by adding subjects to the curriculum
+                        @endif
+                    </p>
+                    @if(request('search_subject'))
+                        <a
+                            href="/subjects"
+                            class="inline-flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Clear Search
+                        </a>
+                    @else
+                        <a
+                            href="/subject/create"
+                            class="inline-flex items-center gap-2 bg-[#3a8a0f] hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Add First Subject
+                        </a>
+                    @endif
+                </div>
+            @else
+                <!-- Subjects Table -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+
+                    <!-- Table Header -->
+                    <div class="bg-[#3a8a0f] px-6 py-4 overflow-x-auto">
+                        <div class="grid grid-cols-7 gap-3 text-white font-semibold text-xs min-w-max">
+                            <div>COURSE CODE</div>
+                            <div class="">DESCRIPTIVE TITLE</div>
+                            <div>PRE-REQUISITE</div>
+                            <div>YEAR</div>
+                            <div>SEMESTER</div>
+                            <div>CURRICULUM</div>
+                            <div class="text-center">ACTIONS</div>
+                        </div>
+                    </div>
+
+                    <!-- Table Body -->
+                    <div class="divide-y divide-gray-200 overflow-x-auto">
+                        @foreach($subjects as $subject)
+                            <div class="px-6 py-4 hover:bg-gray-50 transition">
+                                <div class="grid grid-cols-7 gap-3 items-center min-w-max text-sm">
+
+                                    <!-- Course Code -->
+                                    <div class="font-bold text-black uppercase">
+                                        {{ $subject->course_code }}
+                                    </div>
+
+                                    <!-- Descriptive Title -->
+                                    <div class="text-gray-800 font-medium w-[8rem] break-all">
+                                        {{ $subject->descriptive_title }}
+                                    </div>
+
+                                    <!-- Pre-requisite -->
+                                    <div class="text-gray-600 text-xs">
+                                        {{ $subject->pre_requisite ?? 'None' }}
+                                    </div>
+
+                                    <!-- Year Level -->
+                                    <div>
+                                        <span class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                                            {{ $subject->year_level }}{{ $subject->year_level == 1 ? 'st' : ($subject->year_level == 2 ? 'nd' : ($subject->year_level == 3 ? 'rd' : 'th')) }} Year
+                                        </span>
+                                    </div>
+
+                                    <!-- Semester -->
+                                    <div>
+                                        <span class="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+                                            {{ $subject->semester }}{{ $subject->semester == 1 ? 'st' : 'nd' }} Sem
+                                        </span>
+                                    </div>
+
+                                    <!-- Curriculum -->
+                                    <div class="text-gray-700 font-medium text-xs">
+                                        {{ $subject->curriculum }}
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="flex justify-center gap-2">
+                                        <!-- Edit Button -->
+                                        <a
+                                            href="/subject/{{ $subject->id }}/edit"
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md font-medium transition text-xs"
+                                            title="Edit subject"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+
+                                        </a>
+
+                                        <button
+                                            data-id="{{$subject->id}}"
+                                            data-name="{{$subject->descriptive_title}}"
+                                            class="deleteBtn inline-flex items-center gap-1 px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 rounded-md font-medium transition text-xs"
+                                            title="Delete subject"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+
+
+                <!-- Pagination -->
+                <div class="mt-6">
+                    {{ $subjects->links() }}
+                </div>
+            @endif
+
+        </div>
+    </div>
+
+
+
+    {{--modal body--}}
+    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 hidden">  <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl">
+            <!-- Modal Header -->
+            <div class="flex items-start gap-4 mb-4">
+                <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-gray-900 mb-1">
+                        Delete Subject
+                    </h2>
+                    <p class="text-sm text-gray-600">
+                        This action cannot be undone.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <p class="text-gray-700">
+                    Are you sure you want to delete
+                    <span class="font-bold text-gray-900 uppercase" id="subjectName"></span>?
+                    All associated students and grades will be permanently removed.
+                </p>
+            </div>
+
+            <!-- Modal Actions -->
+            <form id="deleteForm" method="POST">
+
+                @csrf
+                @method('DELETE')
+
+                <div class="flex gap-3 justify-end">
+                    <button
+                        type="button"
+                        id="closeModal"
+                        class="px-4 py-2 rounded-lg bg-white border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition flex items-center gap-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Delete Subject
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Script -->
+    <script>
+
+        let modal = document.getElementById('modal');
+        let closeModal = document.getElementById('closeModal')
+
+        document.querySelectorAll('.deleteBtn').forEach(button => {
+            button.addEventListener("click",() => {
+                let id = button.dataset.id;
+                let name = button.dataset.name;
+
+                modal.classList.remove('hidden');
+
+                subjectName.textContent = name;
+
+                deleteForm.action = '/subject/' + id;
+
+            })
+        })
+        closeModal.onclick = () => modal.classList.add('hidden')
+    </script>
+</x-sidebar>
+
+
+
