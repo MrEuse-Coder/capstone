@@ -47,6 +47,9 @@ Route::middleware(['restore.superadmin'])->group(function () {
 
     Route::get('/campus_subjects/superadmin', [SuperadminSubjectController::class, 'index'])
         ->middleware('super_admin');
+
+    Route::get('/subject/create/superadmin', [SuperadminSubjectController::class, 'create'])
+        ->middleware('super_admin');
 });
 
 Route::get('/stop-impersonation', [SuperAdminController::class, 'stopImpersonation'])

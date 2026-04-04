@@ -24,6 +24,7 @@ class SuperadminSubjectController extends Controller
     public function create()
     {
         //
+        return view('super_admin.campus_subjects.create');
     }
 
     /**
